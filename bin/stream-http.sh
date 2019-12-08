@@ -1,7 +1,7 @@
 #!/bin/bash
 
 vlc \
-    etc/playlist.m3u \
+    playlist.m3u \
     -I dummy \
     --extraintf=http \
     --http-host=0.0.0.0 \
