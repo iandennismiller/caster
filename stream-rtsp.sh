@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/usr/local/bin/vlc \
+vlc \
     playlist.m3u \
     -I dummy \
     --http-host=0.0.0.0 \
