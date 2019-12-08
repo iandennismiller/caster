@@ -1,4 +1,10 @@
 ffserver:
 	ffserver -f etc/ffserver.config
 
-.PHONY: ffserver
+http:
+	bin/stream-http.sh
+
+sbs:
+	bin/stream-sbs.sh
+
+.PHONY: ffserver http sbs
