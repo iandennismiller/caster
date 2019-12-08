@@ -1,3 +1,6 @@
+rtsp:
+	bin/stream-http.sh
+
 ffserver:
 	ffserver -f etc/ffserver.config
 
@@ -7,4 +10,4 @@ http:
 sbs:
 	bin/stream-sbs.sh
 
-.PHONY: ffserver http sbs
+.PHONY: ffserver http sbs rtsp
