@@ -1,0 +1,27 @@
+# https://stackoverflow.com/questions/54886527/
+# vlc "--vlm-conf=C:\Projekty\mosaic\mosaic4.vlm" "--clock-jitter=0" "--mosaic-width=1280" "--mosaic-height=720" "--mosaic-keep-picture" "--mosaic-row=2" "--mosaic-cols=2" "--mosaic-position=1" "--mosaic-order=1,2,3,4" "--ttl=12" "--udp-caching=800" --verbose=2
+
+del all
+
+new channel1 broadcast enabled
+setup channel1 input rtsp://xxx:xxx@192.168.xx.xx/profile2/media.smp
+setup channel1 output #duplicate{dst=mosaic-bridge{id=1,height=720},select=video}
+
+new channel2 broadcast enabled
+setup channel2 input rtsp://xxx:xxx@192.168.x.x/profile2/media.smp
+setup channel2 output #duplicate{dst=mosaic-bridge{id=4,height=340},select=video}
+
+new background broadcast enabled
+setup background input "file:///C:\Program Files\VideoLAN\VLC\pic.jpg"
+setup background option image-duration=-1
+setup background option image-fps=10
+setup background option mosaic-width=1280
+setup background option mosaic-height=720
+setup background option mosaic-keep-picture=1
+
+setup background output #transcode{sfilter=mosaic,vcodec=mpeg,vb=2000,fps=10}:bridge-in{delay=0,id-offset=0}:standard{access=http,mux=ogg,dst=192.168.xx.xx:18554}
+
+control channel1 play
+control channel2 play
+control background play
+
