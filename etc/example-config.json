@@ -1,0 +1,5 @@
+{
+    "boats": "(boat|ship)",
+    "planes": "(air|plane|jet)",
+    "cars": "(car|auto|sedan)"
+}
