@@ -31,7 +31,6 @@ def generate(config):
         for search_path in cfg['subdirs']:
             search_glob = "{}/{}/**".format(cfg["path"], search_path)
             for filename in glob.iglob(search_glob, recursive=True):
-                print(filename)
                 if re.search(pattern, filename, re.IGNORECASE):
                     found = os.path.join(base_cwd, filename)
                     buf += "{}\n".format(found)
