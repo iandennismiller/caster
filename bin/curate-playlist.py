@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import os
+import re
+import glob
 import json
 import click
 import logging
@@ -10,9 +12,8 @@ def cli():
     pass
 
 @click.command('generate', short_help='Generate data.')
-@click.option('--directory', default="var/build", help='Write to directory.')
 @click.option('--config', default='etc/example-config.json', help='Configuration filename.')
-def generate(directory, config):
+def generate(config):
     try:
         with open(config, 'r') as f:
             cfg = json.load(f)
@@ -24,7 +25,20 @@ def generate(directory, config):
         print(e)
         return(-1)
 
-    print(cfg)
+    if not os.path.isdir(cfg["output"]):
+        os.mkdir(cfg["output"])
+
+    for name, pattern in cfg['patterns'].items():
+        buf = ""
+        for search_path in cfg['search']:
+            for filename in glob.iglob('{}/**'.format(search_path), recursive=True):
+                if re.search(pattern, filename):
+                    buf += "{}\n".format(filename)
+        if buf != "":
+            with open("{}/{}.m3u".format(cfg["output"], name), "w") as f:
+                f.write("#EXTM3U\n")
+                f.write(buf)
+
 
 cli.add_command(generate)
 

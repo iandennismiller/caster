@@ -1,5 +1,9 @@
 {
-    "boats": "(boat|ship)",
-    "planes": "(air|plane|jet)",
-    "cars": "(car|auto|sedan)"
+    "output": "var/build",
+    "search": ["etc"],
+    "patterns": {
+        "config": "(example|ffserver)",
+        "m3u": "playlist",
+        "cars": "(car|auto|sedan)"
+    }    
 }

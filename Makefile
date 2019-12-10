@@ -1,5 +1,5 @@
 curate:
-	bin/curate-playlist.py
+	bin/curate-playlist.py generate
 
 requirements:
 	pip install -r etc/requirements.txt
