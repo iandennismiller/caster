@@ -5,7 +5,6 @@ import re
 import glob
 import json
 import click
-import logging
 
 @click.group()
 def cli():
@@ -25,17 +24,21 @@ def generate(config):
         print(e)
         return(-1)
 
-    if not os.path.isdir(cfg["output"]):
-        os.mkdir(cfg["output"])
+    base_cwd = os.getcwd()
 
     for name, pattern in cfg['patterns'].items():
         buf = ""
-        for search_path in cfg['search']:
-            for filename in glob.iglob('{}/**'.format(search_path), recursive=True):
-                if re.search(pattern, filename):
-                    buf += "{}\n".format(filename)
+        for search_path in cfg['subdirs']:
+            search_glob = "{}/{}/**".format(cfg["path"], search_path)
+            for filename in glob.iglob(search_glob, recursive=True):
+                print(filename)
+                if re.search(pattern, filename, re.IGNORECASE):
+                    found = os.path.join(base_cwd, filename)
+                    buf += "{}\n".format(found)
         if buf != "":
-            with open("{}/{}.m3u".format(cfg["output"], name), "w") as f:
+            filename = "{}/{}.m3u".format(cfg["path"], name)
+            print("write {}".format(filename))
+            with open(filename, "w") as f:
                 f.write("#EXTM3U\n")
                 f.write(buf)
 
@@ -43,13 +46,5 @@ def generate(config):
 cli.add_command(generate)
 
 if __name__ == '__main__':
-    if not os.path.isdir('var'):
-        os.mkdir('var')
-
-    logging.basicConfig(
-        filename='var/curate.log',
-        level=logging.INFO
-    )
-
     print("curate 0.1")
     cli()

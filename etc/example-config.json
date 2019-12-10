@@ -1,6 +1,6 @@
 {
-    "output": "var/build",
-    "search": ["etc"],
+    "path": ".",
+    "subdirs": ["etc"],
     "patterns": {
         "config": "(example|ffserver)",
         "m3u": "playlist",
