@@ -58,6 +58,12 @@ def generate(config):
     cfg = load_cfg(config)
     base_cwd = os.getcwd()
 
+    listing = {}
+    for search_path in cfg['subdirs']:
+        search_glob = "{}/{}/**".format(cfg["path"], search_path)
+        for filename in glob.iglob(search_glob, recursive=True):
+            listing[filename] = False
+
     for name, pattern in cfg['patterns'].items():
         if type(pattern) is dict:
             pattern_include = pattern["include"]
@@ -71,12 +77,16 @@ def generate(config):
             search_glob = "{}/{}/**".format(cfg["path"], search_path)
             for filename in glob.iglob(search_glob, recursive=True):
                 was_found = False
+
                 if pattern_exclude:
                     if re.search(pattern_include, filename, re.IGNORECASE) and not re.search(pattern_exclude, filename, re.IGNORECASE):
                         was_found = True
+                        listing[filename] = True
                 else:
                     if re.search(pattern_include, filename, re.IGNORECASE):
                         was_found = True
+                        listing[filename] = True
+
                 if was_found:
                     found = os.path.join(base_cwd, filename)
                     buf += "{}\n".format(found)
@@ -86,6 +96,20 @@ def generate(config):
             with open(filename, "w") as f:
                 f.write("#EXTM3U\n")
                 f.write(buf)
+
+    # write unmatched
+    buf = ""
+    for filename in listing:
+        if listing[filename] is False:
+            found = os.path.join(base_cwd, filename)
+            buf += "{}\n".format(found)
+
+    filename = "{}/{}.m3u".format(cfg["path"], "unmatched")
+    print("write {}".format(filename))
+    with open(filename, "w") as f:
+        f.write("#EXTM3U\n")
+        f.write(buf)
+
 
 
 cli.add_command(generate)
