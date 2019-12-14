@@ -27,11 +27,25 @@ def generate(config):
     base_cwd = os.getcwd()
 
     for name, pattern in cfg['patterns'].items():
+        if type(pattern) is dict:
+            pattern_include = pattern["include"]
+            pattern_exclude = pattern["exclude"]
+        else:
+            pattern_include = pattern
+            pattern_exclude = None
+
         buf = ""
         for search_path in cfg['subdirs']:
             search_glob = "{}/{}/**".format(cfg["path"], search_path)
             for filename in glob.iglob(search_glob, recursive=True):
-                if re.search(pattern, filename, re.IGNORECASE):
+                was_found = False
+                if pattern_exclude:
+                    if re.search(pattern_include, filename, re.IGNORECASE) and not re.search(pattern_exclude, filename, re.IGNORECASE):
+                        was_found = True
+                else:
+                    if re.search(pattern_include, filename, re.IGNORECASE):
+                        was_found = True
+                if was_found:
                     found = os.path.join(base_cwd, filename)
                     buf += "{}\n".format(found)
         if buf != "":

@@ -2,7 +2,10 @@
     "path": ".",
     "subdirs": ["etc"],
     "patterns": {
-        "config": "(example|ffserver)",
+        "config": {
+            "include": "(example|ffserver)",
+            "exclude": "ffmpeg"
+        },
         "m3u": "playlist",
         "cars": "(car|auto|sedan)"
     }    
