@@ -1,5 +1,7 @@
 # caster
 
+In VLC, open Network: `rtsp://127.0.0.1:8554/`
+
 ```
 HOST=127.0.0.1
 rtsp://$HOST:8554/
