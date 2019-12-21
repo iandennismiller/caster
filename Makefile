@@ -5,7 +5,7 @@ requirements:
 	pip install -r etc/requirements.txt
 
 rtsp:
-	bin/stream-http.sh
+	bin/stream-rtsp.sh
 
 ffserver:
 	ffserver -f etc/ffserver.config
