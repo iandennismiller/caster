@@ -45,7 +45,7 @@ def analyze(config):
     bag = nltk.word_tokenize(raw)
     freqdist = FreqDist(bag)
     # words = [ x for (x, c) in freqdist.items() if c > 5 ]
-    words_sorted = sorted(freqdist.items(), key = 
+    words_sorted = sorted(freqdist.items(), key =
         lambda kv:(kv[1], kv[0]))
     top_words = words_sorted[-30:]
     top_words.reverse()
@@ -89,6 +89,7 @@ def generate(config):
 
                 if was_found:
                     found = os.path.join(base_cwd, filename)
+                    found = os.path.relpath(found, cfg["path"])
                     buf += "{}\n".format(found)
         if buf != "":
             filename = "{}/{}.m3u".format(cfg["path"], name)
@@ -102,7 +103,9 @@ def generate(config):
     for filename in listing:
         if listing[filename] is False:
             found = os.path.join(base_cwd, filename)
-            buf += "{}\n".format(found)
+            found = os.path.relpath(found, cfg["path"])
+            if found not in cfg['subdirs']:
+                buf += "{}\n".format(found)
 
     filename = "{}/{}.m3u".format(cfg["path"], "unmatched")
     print("write {}".format(filename))
