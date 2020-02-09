@@ -1,9 +1,3 @@
-curate:
-	bin/curate-playlist.py generate
-
-requirements:
-	pip install -r etc/requirements.txt
-
 rtsp:
 	bin/stream-rtsp.sh
 
@@ -16,4 +10,4 @@ http:
 sbs:
 	bin/stream-sbs.sh
 
-.PHONY: ffserver http sbs rtsp curate requirements
+.PHONY: ffserver http sbs rtsp
